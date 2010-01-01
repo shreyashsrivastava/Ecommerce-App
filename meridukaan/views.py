@@ -4,6 +4,7 @@ from django.http import JsonResponse
 import json
 import datetime
 from .models import *
+from .utils import cookieCart, cartData, guestOrder
 # Create your views here.
 
 class productlist(ListView): 
@@ -13,13 +14,9 @@ class productlist(ListView):
     template_name = 'meridukaan/home.html'
 
 def cart(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
+    data = cartData(request)
+    order = data['order']
+    items = data['items']
 
     for_front = {
         'items':items,
@@ -28,13 +25,9 @@ def cart(request):
     return render(request, 'meridukaan/cart.html', for_front)
 
 def checkout(request):
-    if request.user.is_authenticated:
-        customer = request.user.customer
-        order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        items = order.orderitem_set.all()
-    else:
-        items = []
-        order = {'get_cart_items':0, 'get_cart_total':0, 'shipping':False}
+    data = cartData(request)
+    order = data['order']
+    items = data['items']
 
     for_front = {
         'items':items,
@@ -75,23 +68,25 @@ def processOrder(request):
     if request.user.is_authenticated:
         customer = request.user.customer
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
-        total = float(data['form']['total'])
-        order.transaction_id = transaction_id
-
-        if total == order.get_cart_total:
-            order.complete = True
-        order.save()
-
-        if order.shipping == True:
-            ShippingAddress.objects.create(
-                customer = customer,
-                order = order,
-                address = data['shipping']['address'],
-                city = data['shipping']['city'],
-                state = data['shipping']['state'],
-                pincode = data['shipping']['pincode'],
-            )
 
     else:
-        print("Unauthenticated User")
+        customer, order = guestOrder(request, data)
+
+    total = float(data['form']['total'])
+    order.transaction_id = transaction_id
+
+    if total == order.get_cart_total:
+        order.complete = True
+    order.save()    
+
+    if order.shipping == True:
+        ShippingAddress.objects.create(
+            customer = customer,
+            order = order,
+            address = data['shipping']['address'],
+            city = data['shipping']['city'],
+            state = data['shipping']['state'],
+            pincode = data['shipping']['pincode'],
+        )
+
     return JsonResponse('Order Processed', safe=False) 

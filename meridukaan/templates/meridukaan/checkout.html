@@ -49,7 +49,14 @@
                         <label for="pincode">PinCode</label>
                       </div>
                       </div>
-                    </div>                     
+                    </div>  
+                    <ul class="collapsible">
+                      <li>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                      </li>
+                    </ul>
+                    <button class="left-align btn" href="#" id="make-payment">Proceed for Payment</a>                                       
                   </form>                                
                 </div>
             </div>
@@ -58,7 +65,7 @@
               
               <h5>Order Summary</h5><hr><br>
               {% for item in items %}
-                {{ item.product.name }} : {{ item.quantity }} : Rs. {{ item.get_total }}<br><br>
+                "{{ item.product.name }}" : {{ item.quantity }} : Rs. {{ item.get_total }}<br><br>
               {% endfor %}
               <hr>
               <p>Total Items: {{ order.get_cart_items }}</p><br>
@@ -66,9 +73,6 @@
               <hr>             
             </div>  
           </div> 
-        </div>
-        <div class="card-action right-align">
-          <button class="btn" href="#" id="make-payment">Proceed for Payment</a>
         </div>
       </div>
     </div>
@@ -101,44 +105,50 @@
     })
 
   function submitformdata(){
-    var userformdata = {
+      var userformdata = {
         'name':null,
         'email':null,
-        'total':total,
-    }
-    var shippingInfo = {
-        'address':address,
-        'city':city,
-        'state':state,
-        'pincode':pincode,    
-    }
+        'total':total
+      }
+      var shippingInfo = {
+          'address':address,
+          'city':city,
+          'state':state,
+          'pincode':pincode,    
+      }
 
-    if(shippingInfo != 'False'){
-      shippingInfo.address = form.address.value
-      shippingInfo.city = form.city.value
-      shippingInfo.state = form.state.value
-      shippingInfo.pincode = form.pincode.value
-    }
-    if(user=='AnonymousUser'){
-      userformdata.name = form.name.value
-      userformdata.email = form.email.value
-    }
+      if(shippingInfo != 'False'){
+        shippingInfo.address = form.address.value
+        shippingInfo.city = form.city.value
+        shippingInfo.state = form.state.value
+        shippingInfo.pincode = form.pincode.value
+      }
+      if(user=='AnonymousUser'){
+        userformdata.name = form.name.value
+        userformdata.email = form.email.value
+      }
 
-    var url = 'process_order'
-    fetch(url, {
-      method:"POST",
-      headers:{
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrf_token,
-      },
-      body:JSON.stringify({'form':userformdata, 'shipping':shippingInfo})
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log('Success:', data);
-      alert('Transaction Complete');
-      window.location.href = "{% url 'meridukaan:home' %}";
-    })
+      var url = 'process_order'
+      fetch(url, {
+        method:"POST",
+        headers:{
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrf_token,
+        },
+        body:JSON.stringify({'form':userformdata, 'shipping':shippingInfo})
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Success:', data);
+        alert('Transaction Complete');
+
+        cart = {}
+        document.cookie = "cart=" + JSON.stringify(cart) + "; domain=; path=/"
+
+        window.location.href = "{% url 'meridukaan:home' %}";
+      })
+    
+    
   }
 
 </script>
