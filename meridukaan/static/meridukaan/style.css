@@ -1,0 +1,23 @@
+body{
+    background-color: whitesmoke;
+}
+
+nav{
+    background-color: #00b0ff;
+}
+a{
+    color: black;
+}
+
+#search{
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#w-img-bg{
+  width: 100%;
+  height: 594px;
+  -webkit-filter: brightness(70%);
+}
