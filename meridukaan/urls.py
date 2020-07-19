@@ -5,3 +5,4 @@ app_name = 'meridukaan'
 urlpatterns = [
     path('', productlist.as_view()),
 ]
+

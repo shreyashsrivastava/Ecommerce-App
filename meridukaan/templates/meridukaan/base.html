@@ -18,35 +18,72 @@
         <div class="nav-wrapper container">
           <a href="#!" class="brand-logo">MeriDukaan</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+          <a href="/" id="cart-icon"><i class="material-icons">shopping_cart</i></a>
           <ul class="right hide-on-med-and-down">
-            <li><a href="sass.html">Sass</a></li>
-            <li><a href="badges.html">Components</a></li>
-            <li><a href="collapsible.html">Javascript</a></li>
-            <li><a href="mobile.html">Mobile</a></li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/">LogIn</a></li>
+            <li><a href="/">About Us</a></li>
+            <!-- <li><a href="/"><i class="material-icons">shopping_cart</i></a></li> -->
           </ul>
         </div>  
     </nav>
     
-    <ul class="sidenav" id="mobile-demo">
-        <li><a href="sass.html">Sass</a></li>
-        <li><a href="badges.html">Components</a></li>
-        <li><a href="collapsible.html">Javascript</a></li>
-        <li><a href="mobile.html">Mobile</a></li>
+    <ul class="sidenav left" id="mobile-demo">
+        <li><a href="/"><h3>Categories</h3></a></li>
+        <hr>
+        <li><a href="/">Electronics</a></li>
+        <li><div class="divider"></div></li><br>
+        <li><a href="/">Computer & Accessories</a></li>
+        <li><div class="divider"></div></li><br>
+        <li><a href="/">Book</a></li>
+        <li><div class="divider"></div></li><br>
+        <li><a href="/">Home</a></li>
+        <li><a href="/">LogIn</a></li>
+        <li><a href="/">About Us</a></li>
     </ul>
-    <div >
-    <img src="../../static/images/welcome.jpg" alt="welcome" class="responsive-img" id='w-img-bg'>
-    <nav class="container" id="search">
-        <div class="nav-wrapper">
-          <form>
-            <div class="input-field">
-              <input id="search" type="search" required>
-              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-              <i class="material-icons">close</i>
-            </div>
-          </form>
+
+    <div id='search' class="row">
+      <div class="col m12 s12 l12">
+        <nav class="container z-depth-2" id="search">
+          <div class="nav-wrapper">
+            <form>
+              <div class="input-field">
+                <input id="search" type="search" required>
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>  
+
+    <div id='card' class="row container">
+
+      {% for p in product_list %}  
+
+      <div class="col l4 m6 s12">
+        <div class="card z-depth-3">
+          <div class="card-image">
+            <img src="{{ p.product_image.url }}" id="pimage">
+            <span class="card-title">{{p.product_name}}</span>
+            <a class="btn-floating halfway-fab waves-effect waves-light blue-grey z-depth-5"><i class="material-icons">add_shopping_cart</i></a>
+          </div>
+          <div class="card-content">
+            <p>
+              <h5>{{ p.product_category }}</h5>
+              {{p.product_description}}
+            </p>
+          </div>
         </div>
-      </nav>
+      </div>
+
+      {% endfor %}
+      
     </div>
+
+  
+
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 
     <script>

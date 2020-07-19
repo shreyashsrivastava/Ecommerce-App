@@ -7,3 +7,4 @@ class productlist(ListView):
     model = product
     context_object_name = 'product_list'
     template_name = 'meridukaan/base.html'
+
