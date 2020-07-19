@@ -1,0 +1,53 @@
+{% extends "meridukaan/base.html" %}
+{% load static %}
+{% block content %}
+
+<div id='search' class="row">
+    <div class="col m12 s12 l12">
+      <nav class="container z-depth-2" id="search">
+        <div class="nav-wrapper">
+          <form>
+            <div class="input-field">
+              <input id="search" type="search" required >
+              <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+              <i class="material-icons">close</i>
+            </div>
+          </form>
+        </div>
+      </nav>
+    </div>
+  </div>  
+
+  <div id='card' class="row container">
+
+    {% for p in product_list %}  
+
+    <div class="col l4 m6 s12">
+      <div class="card z-depth-3" id='cardid'>
+        <div class="card-image">
+          <img src="{{ p.product_image.url }}" id="pimage">
+          <a class="btn-floating halfway-fab waves-effect waves-light blue-grey z-depth-5"><i class="material-icons">add_shopping_cart</i></a>
+        </div>
+        <div class="card-content"> 
+          <div class="row">          
+            <div class="col l6 s6 m6">              
+              <h5>{{p.product_name}}</h5>
+            </div>
+            <div class="col l6 s6 m6">   
+              <div class="right-align" style="float: right;"><h5>Rs. {{ p.product_price }}</h5></div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col l12 s12 m12">
+              {{p.product_description}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+    
+  </div>
+{% endblock %}
+

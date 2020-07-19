@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,11 +13,11 @@
 </head>
 <body>
 
-    <nav id='nav-header'>
-        <div class="nav-wrapper container">
-          <a href="#!" class="brand-logo">MeriDukaan</a>
+    <nav>
+        <div class="nav-wrapper" id='nav-header'>
+          <a href="{% url 'meridukaan:home' %}" class="brand-logo">MeriDukaan</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <a href="/" id="cart-icon"><i class="material-icons">shopping_cart</i></a>
+          <a href="{% url 'meridukaan:cart' %}" id="cart-icon"><i class="material-icons hoverable">shopping_cart</i></a>
           <ul class="right hide-on-med-and-down">
             <li><a href="/">Home</a></li>
             <li><a href="/">LogIn</a></li>
@@ -31,58 +30,44 @@
     <ul class="sidenav left" id="mobile-demo">
         <li><a href="/"><h3>Categories</h3></a></li>
         <hr>
-        <li><a href="/">Electronics</a></li>
+        {% for pc in product_list %}
+        <li><a href="/">{{ pc.product_category }}</a></li>
         <li><div class="divider"></div></li><br>
-        <li><a href="/">Computer & Accessories</a></li>
-        <li><div class="divider"></div></li><br>
-        <li><a href="/">Book</a></li>
-        <li><div class="divider"></div></li><br>
+        {% endfor %}
         <li><a href="/">Home</a></li>
         <li><a href="/">LogIn</a></li>
         <li><a href="/">About Us</a></li>
     </ul>
+    
+    {% block content %}
+    {% endblock %}    
 
-    <div id='search' class="row">
-      <div class="col m12 s12 l12">
-        <nav class="container z-depth-2" id="search">
-          <div class="nav-wrapper">
-            <form>
-              <div class="input-field">
-                <input id="search" type="search" required>
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
-              </div>
-            </form>
+    <footer class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">Footer Content</h5>
+            <p class="grey-text text-lighten-4">You can use rows and columns here to organize your footer content.</p>
           </div>
-        </nav>
-      </div>
-    </div>  
-
-    <div id='card' class="row container">
-
-      {% for p in product_list %}  
-
-      <div class="col l4 m6 s12">
-        <div class="card z-depth-3">
-          <div class="card-image">
-            <img src="{{ p.product_image.url }}" id="pimage">
-            <span class="card-title">{{p.product_name}}</span>
-            <a class="btn-floating halfway-fab waves-effect waves-light blue-grey z-depth-5"><i class="material-icons">add_shopping_cart</i></a>
-          </div>
-          <div class="card-content">
-            <p>
-              <h5>{{ p.product_category }}</h5>
-              {{p.product_description}}
-            </p>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Links</h5>
+            <ul>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 1</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 3</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 4</a></li>
+            </ul>
           </div>
         </div>
       </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2014 Copyright Text
+        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        </div>
+      </div>
+    </footer>
 
-      {% endfor %}
-      
-    </div>
-
-  
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script> 

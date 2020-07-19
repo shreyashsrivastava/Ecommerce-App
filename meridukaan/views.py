@@ -6,5 +6,10 @@ from .models import product
 class productlist(ListView):
     model = product
     context_object_name = 'product_list'
-    template_name = 'meridukaan/base.html'
+    template_name = 'meridukaan/home.html'
 
+def cart(request):
+    return render(request, 'meridukaan/cart.html')
+
+def checkout(request):
+    return render(request, 'meridukaan/checkout.html')

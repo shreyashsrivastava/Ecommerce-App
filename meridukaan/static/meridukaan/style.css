@@ -5,6 +5,9 @@ body{
 nav{
     background-color: #00b0ff;
 }
+footer{
+    background-color: #00b0ff;
+}
 /* a{
     color: black;
 } */
@@ -22,6 +25,11 @@ nav{
   -webkit-filter: brightness(70%);
 } */
 
+#nav-header{
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
 #search{
     margin-top: 15px;
 }
@@ -38,4 +46,12 @@ nav{
 #cart-icon{
     float: right;
     padding-left: 5px;
+}
+
+#cardid{
+    height: 450px;
+}
+
+#cart-card{
+    margin-top: 5%;
 }
