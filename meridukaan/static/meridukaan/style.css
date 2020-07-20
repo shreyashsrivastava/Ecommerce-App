@@ -55,3 +55,25 @@ footer{
 #cart-card{
     margin-top: 5%;
 }
+
+#down{
+    float: left;
+    width: 20px;
+    height: 20px;
+}
+
+#up{
+    float: right;
+    float: inline;
+    width: 20px;
+    height: 20px;
+}
+
+.input-group{
+    height: 10px;
+}
+
+#myNumber{
+    margin-right: -50px;
+    padding-right: -200px;
+}
