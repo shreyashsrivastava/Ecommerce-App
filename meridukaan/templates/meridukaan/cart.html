@@ -2,10 +2,10 @@
 
 {% block content %}
 
-<div id='cart-card' class="container col s12 m12 l12">
+<div id='cart-card' class="container col s12 m12 l12">  
     <div class="card horizontal">
       <div class="card-stacked">
-        <div class="card-content">
+        <div class="card-content">      
           <div class="row">
             <div class="col l4 m4 s12">
               Items: {{ order.get_cart_items }}
@@ -26,7 +26,7 @@
   <div class="card horizontal">
     <div class="card-stacked">
       <div class="card-content">
-        <div class="row">
+        <!-- <div class="row">
           <div class="col l4 m4 s12">
             Img
           </div>
@@ -42,30 +42,30 @@
           <div class="col l2 m2 s12">
             Total
           </div>
-        </div>  
+        </div>   -->
 
-        {% for item in items %}   
-
-        <div class="row">
-          <div class="col l4 m4 s12">
-            <img src="{{ item.product.image.url }}" alt="" height="100px" width="200px">
-          </div>
-          <div class="col l3 m3 s12">
-            {{ item.product.name }}
-          </div>
-          <div class="col l1 m1 s12">
-            {{ item.product.price|floatformat:2 }}
-          </div>
-          <div class="col l2 m2 s12">
-            <input id="pincode" type="number" class="validate" value="{{ item.quantity }}">
-          </div>
-          <div class="col l2 m2 s12">
-            {{ item.get_total }}
-          </div>
-        </div>
-        
-        {% endfor %} 
-
+        <table class="responsive-table highlight">
+          <thead>
+            <tr>
+                <th>Item Image</th>
+                <th>Item Name</th>
+                <th>Item Price</th>
+                <th>Item Quantity</th>
+                <th>Total Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+            <tr>
+              <td><img src="{{ item.product.image.url }}" alt="" height="100px" width="200px"></td>
+              <td>{{ item.product.name }}<p>{{ item.product.description }}</p></td>
+              <td>Rs. {{ item.product.price|floatformat:2 }}</td>
+              <td><input id="quantity" type="number" class="validate" value="{{ item.quantity }}" min="0"></td>
+              <td>Rs. {{ item.get_total }}</td>
+            </tr>
+              {% endfor %}
+          </tbody>
+        </table>             
       </div>
     </div>
   </div>

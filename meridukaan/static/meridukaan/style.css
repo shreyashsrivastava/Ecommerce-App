@@ -77,3 +77,8 @@ footer{
     margin-right: -50px;
     padding-right: -200px;
 }
+
+#quantity{
+    padding-top: -20px;
+    margin: 0px;
+}
