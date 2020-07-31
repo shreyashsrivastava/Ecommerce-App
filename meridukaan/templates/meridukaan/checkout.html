@@ -7,48 +7,54 @@
       <div class="card-stacked">
         <div class="card-content">
           <div>
-          <h5 class="left-align" style="display: inline-block;">Enter Address</h5>
-          <a class="btn right" style="display: inline-block; margin-top: 10px;" href="{% url 'meridukaan:cart' %}">Back To Cart</a><br><br>
+          
+          <a class="btn " style="display: inline-block; margin-top: 10px;" href="{% url 'meridukaan:cart' %}">Back To Cart</a><br><br>
           </div>
           <div class="row">
             <div class="col l8 m12 s12">
-                <div class="row">
-                  <form class="col s12">
+                <div class="row">                 
+                  <form class="col s12" id="form">
+                    {% csrf_token %}
+                    <div id="user-info">
                     <div class="row">
                       <div class="input-field col s6">
-                        <input id="first_name" type="text" class="validate" required>
-                      <label for="first_name">Name</label>
+                        <input id="name" type="text" class="validate" name='name' required>
+                      <label for="name">Name</label>
                       </div>                  
                       <div class="input-field col s6">
-                        <input id="email" type="email" class="validate" required>
+                        <input id="email" type="email" class="validate" name="email" required>
                         <label for="email">Email</label>
                       </div>
-                    </div>    
-                    <div class="row">
+                    </div>
+                    </div>   
+                    <div id="shipping-info">
+                      <h5 class="left-align" style="display: inline-block;">Enter Address</h5> 
+                    <div class="row">                     
                       <div class="input-field col s6">
-                        <input id="first_name" type="text" class="validate" required>
-                        <label for="first_name">Address</label>
+                        <input id="address" type="text" class="validate" name="address" required>
+                        <label for="address">Address</label>
                       </div>                  
                       <div class="input-field col s6">
-                        <input id="email" type="text" class="validate" required>
-                        <label for="email">City</label>
+                        <input id="city" type="text" class="validate" name="city" required>
+                        <label for="city">City</label>
                       </div>
                     </div>  
                     <div class="row">
                       <div class="input-field col s6">
-                        <input id="first_name" type="text" class="validate" required>
-                        <label for="first_name">State</label>
+                        <input id="state" type="text" class="validate" name="state" required>
+                        <label for="state">State</label>
                       </div>                  
                       <div class="input-field col s6">
-                        <input id="pincode" type="number" class="validate" required>
+                        <input id="pincode" type="number" class="validate" name="pincode" required>
                         <label for="pincode">PinCode</label>
+                      </div>
                       </div>
                     </div>                     
                   </form>                                
                 </div>
             </div>
            
-            <div class="col l4 m12 s12">
+            <div class="col l4 m12 s12" id="order-summary">
               
               <h5>Order Summary</h5><hr><br>
               {% for item in items %}
@@ -59,13 +65,82 @@
               <p>Total Price: Rs. {{ order.get_cart_total }}</p>
               <hr>             
             </div>  
-          </div>
+          </div> 
         </div>
         <div class="card-action right-align">
-          <button class="btn" href="#">Proceed for Payment</a>
+          <button class="btn" href="#" id="make-payment">Proceed for Payment</a>
         </div>
       </div>
     </div>
 </div>
+
+<script type="text/javascript">
+  var shipping = '{{order.shipping}}'
+  var total = '{{ order.get_cart_total|floatformat:2 }}'
+
+  if(shipping == 'False'){
+    document.getElementById('shipping-info').innerHTML = ''
+  }
+
+  if(user != 'AnonymousUser' && shipping == 'False'){
+    document.getElementById('user-info').innerHTML = ''
+    document.getElementById('shipping-info').innerHTML = ''
+  }
+  if(user != 'AnonymousUser'){
+    document.getElementById('user-info').innerHTML = ''
+  }
+
+  var form = document.getElementById('form')
+
+  csrf_token = form.getElementsByTagName('input')[0].value
+  console.log('NewToken:', csrftoken)
+
+  document.getElementById('make-payment').addEventListener('click',
+    function(e){
+      submitformdata()
+    })
+
+  function submitformdata(){
+    var userformdata = {
+        'name':null,
+        'email':null,
+        'total':total,
+    }
+    var shippingInfo = {
+        'address':address,
+        'city':city,
+        'state':state,
+        'pincode':pincode,    
+    }
+
+    if(shippingInfo != 'False'){
+      shippingInfo.address = form.address.value
+      shippingInfo.city = form.city.value
+      shippingInfo.state = form.state.value
+      shippingInfo.pincode = form.pincode.value
+    }
+    if(user=='AnonymousUser'){
+      userformdata.name = form.name.value
+      userformdata.email = form.email.value
+    }
+
+    var url = 'process_order'
+    fetch(url, {
+      method:"POST",
+      headers:{
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrf_token,
+      },
+      body:JSON.stringify({'form':userformdata, 'shipping':shippingInfo})
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Success:', data);
+      alert('Transaction Complete');
+      window.location.href = "{% url 'meridukaan:home' %}";
+    })
+  }
+
+</script>
 
 {% endblock %}

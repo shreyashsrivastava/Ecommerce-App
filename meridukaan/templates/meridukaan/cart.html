@@ -1,5 +1,5 @@
 {% extends "meridukaan/base.html" %}
-
+{% include "meridukaan/base.html" %}
 {% block content %}
 
 <div id='cart-card' class="container col s12 m12 l12">  
@@ -60,10 +60,14 @@
               <td><img src="{{ item.product.image.url }}" alt="" height="100px" width="200px"></td>
               <td>{{ item.product.name }}<p>{{ item.product.description }}</p></td>
               <td>Rs. {{ item.product.price|floatformat:2 }}</td>
-              <td><input id="quantity" type="number" class="validate" value="{{ item.quantity }}" min="0"></td>
+              <td>
+                <button class="btn btn-small btn-flat update-cart" data-product="{{ item.product.id }}" data-action="remove"><i class="material-icons">remove</i></button>
+                {{ item.quantity }}
+                <button class="btn btn-small btn-flat update-cart" data-product="{{ item.product.id }}" data-action="add"><i class="material-icons">add</i></button>               
+              </td>
               <td>Rs. {{ item.get_total }}</td>
             </tr>
-              {% endfor %}
+            {% endfor %}
           </tbody>
         </table>             
       </div>

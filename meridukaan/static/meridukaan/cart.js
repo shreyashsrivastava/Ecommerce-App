@@ -1,38 +1,63 @@
- var updatebtn = document.getElementsByClassName("update-cart")
+var updatebtn = document.getElementsByClassName("update-cart")
 
- for(var i=0; i < updatebtn.length; i++)
- {
+for(var i=0; i < updatebtn.length; i++)
+{
     updatebtn[i].addEventListener('click', function(){
         var productId = this.dataset.product
         var action = this.dataset.action
         console.log('ProductId:', productId, 'Action:', action)
         console.log('USER:', user)
-        if(user === 'AnonymousUser'){
-            console.log('User is not logged in')
+        if(user == 'AnonymousUser'){
+            addCookieItem(productId, action)
         }else{
             updateUserOrder(productId, action)
         }
-       
+        
     })
- }
+}
 
- function updateUserOrder(productId, action){
-        console.log('User is authenticated, sending data...')
+function addCookieItem(productId, action){
+    console.log('User is not logged indfgdsfg')
+    if(action == 'add'){
+        if(cart[productId] == undefined){
+            cart[productId] = {'quantity':1}            
+        }else{
+            cart[productId]['quantity'] += 1
+        }
+    }
 
-        var url = '/update_item'
+    if(action == 'remove'){
+        cart[productId]['quantity'] -= 1
 
-        fetch(url, {
-            method:'POST',
-            headers:{
-                'Content-Type' : 'application/json',
-                'X-CSRFToken' : csrftoken
-            },
-            body: JSON.stringify({'productId':productId, 'action':action})
-        })
-        .then((response) => {
-            return response.json()
-        })
-        .then((data) => {
-            console.log('data:', data)
-        })
- }
+        if(cart[productId]['quantity'] <= 0){
+            console.log('Item should be Removed')
+            delete cart[productId];
+        }
+    }
+    console.log('Cart:', cart)
+    
+    document.cookie = "cart=" + JSON.stringify(cart) +  "; domain=; path=/; samesite=lax; ";
+
+}
+
+function updateUserOrder(productId, action){
+    console.log('User is authenticated, sending data...')
+
+    var url = '/update_item'
+
+    fetch(url, {
+        method:'POST',
+        headers:{
+            'Content-Type' : 'application/json',
+            'X-CSRFToken' : csrftoken
+        },
+        body: JSON.stringify({'productId':productId, 'action':action})
+    })
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        console.log('data:', data)
+        location.reload()
+    })
+}

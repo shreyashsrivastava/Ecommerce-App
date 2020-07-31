@@ -29,17 +29,38 @@
           return cookieValue;
       }
       const csrftoken = getToken('csrftoken');
-    </script>
+
+      function getCookie(name){
+        var cookieArr = document.cookie.split(";");
+
+        for(var i=0; i<cookieArr.length; i++){
+          var cookiePair = cookieArr[i].split("=");
+
+          if(name == cookiePair[0].trim()){
+            return decodeURIComponent(cookiePair[1]);
+          }
+        }
+        return null;
+      }
+
+      var cart = JSON.parse(getCookie(cart))
+      console.log(cart);
+      if(cart == undefined){
+        cart = {}      
+        console.log("Cart was created.")
+        document.cookie = "cart=" + JSON.stringify(cart) + "; domain=; path=/; samesite=lax; "
+      }
+      console.log('Cart:',cart)
+    </script> 
 
     <title>Dukaan</title>
 </head>
 <body>
-
     <nav>
         <div class="nav-wrapper" id='nav-header'>
           <a href="{% url 'meridukaan:home' %}" class="brand-logo">MeriDukaan</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <a href="{% url 'meridukaan:cart' %}" id="cart-icon"><i class="material-icons hoverable">shopping_cart</i></a>
+          <a href="{% url 'meridukaan:cart' %}" id="cart-icon"><i class="material-icons hoverable">shopping_cart</i>{{ order.get_cart_items }}</a>
           <ul class="right hide-on-med-and-down">
             <li><a href="/">Home</a></li>
             <li><a href="/">LogIn</a></li>
@@ -96,10 +117,10 @@
     <script data-require="jquery@3.1.1" data-semver="3.1.1" src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'meridukaan/cart.js' %}"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var elems = document.querySelectorAll('.sidenav');
-            var instances = M.Sidenav.init(elems, {draggable:'True'});
-        });
+      document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.sidenav');
+          var instances = M.Sidenav.init(elems, {draggable:'True'});
+      });     
     </script>      
 </body>
 </html>
