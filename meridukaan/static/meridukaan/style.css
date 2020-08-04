@@ -82,3 +82,7 @@ footer{
     padding-top: -20px;
     margin: 0px;
 }
+
+#payment-modal{
+    float: right;
+}

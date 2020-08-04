@@ -50,13 +50,31 @@
                       </div>
                       </div>
                     </div>  
-                    <ul class="collapsible">
+                    <ul class="collapsible left-align" id="payment-modal">
                       <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-                        <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+                        <div class="collapsible-header"><i class="large material-icons">payment</i><button class="btn white black-text" id="make-payment">Proceed for Payment</button> </div>
+                        <div class="collapsible-body"><span>
+                          <ul>
+                            <li><div id="paypal-button-container"></div></li>
+                          </ul>
+                        </span></div>
                       </li>
                     </ul>
-                    <button class="left-align btn" href="#" id="make-payment">Proceed for Payment</a>                                       
+
+                    <!-- <button data-target="modal1" class="left-align btn modal-trigger" href="#" id="make-payment">Proceed for Payment</button>   -->
+                    
+                    <!-- Modal Structure -->
+                    <div id="modal1" class="modal">
+                      <div class="modal-content">
+                        <h4>Modal Header</h4>
+                        <p>A bunch of text</p>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+                      </div>
+                    </div>
+
+                                    
                   </form>                                
                 </div>
             </div>
@@ -78,9 +96,44 @@
     </div>
 </div>
 
+<script src="https://www.paypal.com/sdk/js?client-id=AZQzxDJjhqlEbV10e-AgO3V4luQc7qg7ti0EovYFrNdBwUjrG6JLRhGET4jCj6slT_gAAPZETQ0-e3_H&currency=USD">
+</script>
+
+<script>
+  var total = '{{ order.get_cart_total}}'
+  // Render the PayPal button into #paypal-button-container
+  paypal.Buttons({
+
+    style:{
+      color:'blue',
+      size:'responsive',
+    },
+
+  // Set up the transaction
+  createOrder: function(data, actions) {
+      return actions.order.create({
+          purchase_units: [{
+              amount: {
+                  value: parseFloat(total).toFixed(2)
+              }
+          }]
+      });
+  },
+
+  // Finalize the transaction
+  onApprove: function(data, actions) {
+      return actions.order.capture().then(function(details) {
+        submitformdata()
+      });
+}
+
+
+}).render('#paypal-button-container');
+
+</script>
+
 <script type="text/javascript">
   var shipping = '{{order.shipping}}'
-  var total = '{{ order.get_cart_total|floatformat:2 }}'
 
   if(shipping == 'False'){
     document.getElementById('shipping-info').innerHTML = ''
@@ -99,10 +152,10 @@
   csrf_token = form.getElementsByTagName('input')[0].value
   console.log('NewToken:', csrftoken)
 
-  document.getElementById('make-payment').addEventListener('click',
-    function(e){
-      submitformdata()
-    })
+  // document.getElementById('make-payment').addEventListener('click',
+  //   function(e){
+  //     submitformdata()
+  //   })
 
   function submitformdata(){
       var userformdata = {
@@ -146,10 +199,17 @@
         document.cookie = "cart=" + JSON.stringify(cart) + "; domain=; path=/"
 
         window.location.href = "{% url 'meridukaan:home' %}";
-      })
-    
-    
+      })   
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems, {accordion:'True'});
+  });
+
+  $(document).ready(function(){
+    $('.modal').modal();
+  });
 
 </script>
 
